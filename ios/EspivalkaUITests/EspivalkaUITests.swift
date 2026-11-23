@@ -44,9 +44,7 @@ nonisolated final class EspivalkaUITests: XCTestCase {
 		app.swipeUp()
 		capture("title-collapsed")
 		XCTAssertTrue(app.searchFields["Search"].isHittable)
-		if #unavailable(iOS 26) {
-			XCTAssertLessThan(bar.frame.height, expandedHeight)
-		}
+		XCTAssertLessThan(bar.frame.height, expandedHeight)
 	}
 
 	@MainActor

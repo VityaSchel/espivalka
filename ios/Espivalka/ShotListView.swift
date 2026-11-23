@@ -2,13 +2,16 @@ import SwiftUI
 
 struct ShotListView: View {
 	@Environment(Ratings.self) private var ratings
-	@State private var query = ""
+	let query: SearchQuery
 
 	var body: some View {
 		List {
 			Group {
-				ForEach(ShotSearch.all.results(for: query), id: \.self) { name in
-					NavigationLink(value: name) {
+				ForEach(ShotSearch.all.results(for: query.text), id: \.self) { name in
+					NavigationLink {
+						RatingView(name: name, rating: ratings[name])
+							.environment(ratings)
+					} label: {
 						ShotLabel(name: name, rating: ratings[name])
 							.font(.shotName)
 					}
@@ -25,16 +28,8 @@ struct ShotListView: View {
 		}
 		.listStyle(.plain)
 		.scrollContentBackground(.hidden)
-		.background(Palette.background)
-		.navigationTitle("Espivalka")
-		.navigationBarTitleDisplayMode(.large)
-		.searchable(text: $query, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search")
-		.autocorrectionDisabled()
 		.topBarAttachment {
 			RatingProgress(rated: shots.count(where: { ratings[$0] > 0 }), total: shots.count)
-		}
-		.navigationDestination(for: String.self) { name in
-			RatingView(name: name, rating: ratings[name])
 		}
 	}
 }
@@ -47,7 +42,7 @@ private struct RatingProgress: View {
 		Palette.progress
 			.scaleEffect(x: CGFloat(rated) / CGFloat(total), anchor: .leading)
 			.frame(height: 3)
-			.background(Palette.background)
+			.background(Palette.background, ignoresSafeAreaEdges: [])
 			.accessibilityElement()
 			.accessibilityLabel("Rated shots")
 			.accessibilityValue("\(rated) of \(total)")

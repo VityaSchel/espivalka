@@ -63,21 +63,24 @@ extension View {
 
 enum NavigationBarStyle {
 	static func apply() {
-		let appearance = UINavigationBarAppearance()
-		appearance.configureWithOpaqueBackground()
-		appearance.backgroundColor = UIColor(Palette.background)
-		appearance.shadowColor = .clear
-
 		let glow = NSShadow()
 		glow.shadowColor = UIColor(Palette.glow)
 		glow.shadowBlurRadius = Glow.radius
 		let title: [NSAttributedString.Key: Any] = [.foregroundColor: UIColor(Palette.text), .shadow: glow]
-		appearance.titleTextAttributes = title
-		appearance.largeTitleTextAttributes = title
-
 		let navigationBar = UINavigationBar.appearance()
-		navigationBar.standardAppearance = appearance
-		navigationBar.scrollEdgeAppearance = appearance
+		if #available(iOS 26, *) {
+			navigationBar.titleTextAttributes = title
+			navigationBar.largeTitleTextAttributes = title
+		} else {
+			let appearance = UINavigationBarAppearance()
+			appearance.configureWithOpaqueBackground()
+			appearance.backgroundColor = UIColor(Palette.background)
+			appearance.shadowColor = .clear
+			appearance.titleTextAttributes = title
+			appearance.largeTitleTextAttributes = title
+			navigationBar.standardAppearance = appearance
+			navigationBar.scrollEdgeAppearance = appearance
+		}
 	}
 }
 

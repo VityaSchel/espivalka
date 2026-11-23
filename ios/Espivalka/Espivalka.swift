@@ -10,11 +10,8 @@ struct Espivalka: App {
 
 	var body: some Scene {
 		WindowGroup {
-			NavigationStack {
-				ShotListView()
-			}
-			.tint(Palette.text)
-			.environment(ratings)
+			ShotNavigation(ratings: ratings)
+				.ignoresSafeArea()
 		}
 	}
 }
