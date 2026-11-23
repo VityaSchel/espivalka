@@ -98,7 +98,8 @@ private struct ShareCanvas: View {
 		let referenceSize: CGFloat = 100
 		let font = UIFont(name: Font.shotNameFamily, size: referenceSize) ?? .systemFont(ofSize: referenceSize)
 		let nameWidth = shots.map { ($0.uppercased() as NSString).size(withAttributes: [.font: font]).width }.max() ?? 0
-		let starWidth = UIImage(systemName: .starSymbol, withConfiguration: UIImage.SymbolConfiguration(font: font))?.size.width ?? referenceSize
+		let starConfiguration = UIImage.SymbolConfiguration(font: font).applying(UIImage.SymbolConfiguration(weight: .black))
+		let starWidth = UIImage(systemName: Star.symbol, withConfiguration: starConfiguration)?.size.width ?? referenceSize
 		let starsWidth = CGFloat(Ratings.scale.upperBound) * starWidth
 		return (nameWidth + starsWidth) / referenceSize + nameGap
 	}

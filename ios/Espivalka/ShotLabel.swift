@@ -21,10 +21,9 @@ struct ShotLabel: View {
 			if rating > 0 {
 				HStack(spacing: 2) {
 					ForEach(0..<rating, id: \.self) { _ in
-						Image(systemName: .starSymbol)
+						Star(isFilled: true)
 					}
 				}
-				.symbolVariant(.fill)
 				.foregroundStyle(Palette.star)
 				.accessibilityElement(children: .ignore)
 				.accessibilityLabel(Text.stars(rating))

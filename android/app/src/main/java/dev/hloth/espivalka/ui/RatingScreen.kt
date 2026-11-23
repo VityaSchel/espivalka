@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -109,7 +108,7 @@ private fun RatingBar(rating: Int, onRatingChange: (Int) -> Unit) {
 		for (star in 1..MaxRating) {
 			val filled = star <= rating
 			Icon(
-				imageVector = if (filled) Icons.Filled.Star else OutlinedStar,
+				imageVector = if (filled) FilledStar else OutlinedStar,
 				contentDescription = pluralStringResource(R.plurals.stars, star, star),
 				modifier = Modifier
 					.size(48.dp)

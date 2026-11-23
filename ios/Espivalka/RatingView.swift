@@ -50,8 +50,7 @@ struct StarPicker: View {
 		HStack(spacing: 0) {
 			ForEach(Ratings.scale, id: \.self) { star in
 				let isFilled = star <= rating
-				Image(systemName: .starSymbol)
-					.symbolVariant(isFilled ? .fill : .none)
+				Star(isFilled: isFilled)
 					.font(.system(size: 44))
 					.foregroundStyle(isFilled ? Palette.star : Palette.text)
 					.frame(width: Self.starWidth, height: Self.starWidth)

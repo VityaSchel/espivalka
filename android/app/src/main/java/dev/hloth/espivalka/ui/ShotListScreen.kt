@@ -20,7 +20,6 @@ import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Share
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -176,7 +175,7 @@ private fun RatingStars(rating: Int) {
 	val description = pluralStringResource(R.plurals.stars, rating, rating)
 	Row(Modifier.semantics { contentDescription = description }) {
 		repeat(rating) {
-			Icon(Icons.Filled.Star, contentDescription = null, modifier = Modifier.size(18.dp), tint = StarColor)
+			Icon(FilledStar, contentDescription = null, modifier = Modifier.size(18.dp), tint = StarColor)
 		}
 	}
 }

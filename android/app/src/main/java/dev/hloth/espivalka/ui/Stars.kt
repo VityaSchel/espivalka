@@ -1,7 +1,7 @@
 package dev.hloth.espivalka.ui
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.rounded.Star
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
@@ -12,10 +12,12 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.VectorPath
 import androidx.compose.ui.graphics.vector.toPath
 
-private val starPathData = Icons.Filled.Star.root.filterIsInstance<VectorPath>().single().pathData
+val FilledStar: ImageVector = Icons.Rounded.Star
+
+private val starPathData = FilledStar.root.filterIsInstance<VectorPath>().single().pathData
 private val starPath = starPathData.toPath()
 
-val OutlinedStar: ImageVector = with(Icons.Filled.Star) {
+val OutlinedStar: ImageVector = with(FilledStar) {
 	ImageVector.Builder(
 		name = "OutlinedStar",
 		defaultWidth = defaultWidth,
@@ -31,7 +33,7 @@ val OutlinedStar: ImageVector = with(Icons.Filled.Star) {
 }
 
 fun DrawScope.drawStar(topLeft: Offset, size: Float, color: Color) {
-	val scale = size / Icons.Filled.Star.viewportWidth
+	val scale = size / FilledStar.viewportWidth
 	withTransform({
 		translate(topLeft.x, topLeft.y)
 		scale(scale, scale, Offset.Zero)

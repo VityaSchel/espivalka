@@ -15,8 +15,16 @@ extension Font {
 	static let shotName = Font.custom(shotNameFamily, size: 17, relativeTo: .body)
 }
 
-extension String {
-	static let starSymbol = "star"
+struct Star: View {
+	static let symbol = "star"
+
+	let isFilled: Bool
+
+	var body: some View {
+		Image(systemName: Self.symbol)
+			.symbolVariant(isFilled ? .fill : .none)
+			.fontWeight(.black)
+	}
 }
 
 extension Text {
