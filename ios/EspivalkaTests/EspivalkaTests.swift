@@ -55,24 +55,24 @@ struct StarPickerTests {
 }
 
 struct ShareGridTests {
-	@Test func picksColumnCountClosestToNineBySixteen() {
-		let grid = ShareGrid(itemCount: 16, cellSize: CGSize(width: 1, height: 1), columnSpacing: 0, margin: 0)
-		#expect(grid.columns == 3)
-		#expect(grid.rows == 6)
-		#expect(grid.contentSize == CGSize(width: 3, height: 6))
-		#expect(grid.canvasSize == CGSize(width: 3.375, height: 6))
+	@Test func columnsAreAsWideAsTheirWidestItem() {
+		let grid = ShareGrid(itemWidths: [1, 1, 2, 2, 3, 3, 4], columns: 4, columnSpacing: 1, margin: 1)
+		#expect(grid.rows == 2)
+		#expect(grid.columnWidths == [1, 2, 3, 4])
+		#expect(grid.width == 15)
 	}
 
-	@Test func countsSpacingAndMargins() {
-		let grid = ShareGrid(itemCount: 12, cellSize: CGSize(width: 2, height: 1), columnSpacing: 1, margin: 1)
-		#expect(grid.columns == 1)
-		#expect(grid.contentSize == CGSize(width: 4, height: 14))
-		#expect(grid.canvasSize == CGSize(width: 7.875, height: 14))
+	@Test func rowsFillTheHeightBetweenTheMargins() {
+		let grid = ShareGrid(itemWidths: [CGFloat](repeating: 2, count: 12), columns: 3, columnSpacing: 0, margin: 1)
+		#expect(grid.rows == 4)
+		#expect(grid.width == 8)
+		#expect(abs(CGFloat(grid.rows) * grid.rowHeight - (8 / ShareGrid.aspectRatio - 2)) < 0.001)
 	}
 
-	@Test func padsWideContentVertically() {
-		let grid = ShareGrid(itemCount: 1, cellSize: CGSize(width: 9, height: 1), columnSpacing: 0, margin: 0)
-		#expect(grid.canvasSize == CGSize(width: 9, height: 16))
+	@Test func columnsFlowTopToBottomThenLeftToRight() {
+		let grid = ShareGrid(itemWidths: [CGFloat](repeating: 1, count: shots.count), columns: 6, columnSpacing: 1, margin: 1)
+		#expect(grid.items(inColumn: 0, of: shots.count) == 0..<grid.rows)
+		#expect(grid.items(inColumn: 5, of: shots.count).upperBound == shots.count)
 	}
 }
 

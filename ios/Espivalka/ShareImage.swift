@@ -55,36 +55,34 @@ nonisolated struct ShareImage: Transferable {
 }
 
 private struct ShareCanvas: View {
-	private static let cellHeight: CGFloat = 1.6
-	private static let nameGap: CGFloat = 2
-	private static let columnSpacing: CGFloat = 2
-	private static let margin: CGFloat = 2
+	private static let columns = 6
+	private static let nameGap: CGFloat = 1
+	private static let columnSpacing: CGFloat = 1.5
+	private static let margin: CGFloat = 1.5
 
 	let ratings: [String: Int]
 
 	private let grid: ShareGrid
-	private let cellWidth: CGFloat
 	private let fontSize: CGFloat
 
 	init(ratings: [String: Int]) {
 		self.ratings = ratings
-		cellWidth = Self.cellWidthInEms()
 		grid = ShareGrid(
-			itemCount: shots.count,
-			cellSize: CGSize(width: cellWidth, height: Self.cellHeight),
+			itemWidths: Self.itemWidthsInEms(),
+			columns: Self.columns,
 			columnSpacing: Self.columnSpacing,
 			margin: Self.margin
 		)
-		fontSize = ShareImage.pixelSize.width / grid.canvasSize.width
+		fontSize = ShareImage.pixelSize.width / grid.width
 	}
 
 	var body: some View {
 		HStack(alignment: .top, spacing: Self.columnSpacing * fontSize) {
-			ForEach(0..<grid.columns, id: \.self) { column in
+			ForEach(grid.columnWidths.indices, id: \.self) { column in
 				VStack(spacing: 0) {
-					ForEach(shots[column * grid.rows ..< min((column + 1) * grid.rows, shots.count)], id: \.self) { name in
+					ForEach(shots[grid.items(inColumn: column, of: shots.count)], id: \.self) { name in
 						ShotLabel(name: name, rating: ratings[name] ?? 0)
-							.frame(width: cellWidth * fontSize, height: Self.cellHeight * fontSize)
+							.frame(width: grid.columnWidths[column] * fontSize, height: grid.rowHeight * fontSize)
 					}
 				}
 			}
@@ -94,13 +92,15 @@ private struct ShareCanvas: View {
 		.background(Palette.background)
 	}
 
-	private static func cellWidthInEms() -> CGFloat {
+	private static func itemWidthsInEms() -> [CGFloat] {
 		let referenceSize: CGFloat = 100
 		let font = UIFont(name: Font.shotNameFamily, size: referenceSize) ?? .systemFont(ofSize: referenceSize)
-		let nameWidth = shots.map { ($0.uppercased() as NSString).size(withAttributes: [.font: font]).width }.max() ?? 0
 		let starConfiguration = UIImage.SymbolConfiguration(font: font).applying(UIImage.SymbolConfiguration(weight: .black))
 		let starWidth = UIImage(systemName: Star.symbol, withConfiguration: starConfiguration)?.size.width ?? referenceSize
 		let starsWidth = CGFloat(Ratings.scale.upperBound) * starWidth
-		return (nameWidth + starsWidth) / referenceSize + nameGap
+		return shots.map { name in
+			let nameWidth = (name.uppercased() as NSString).size(withAttributes: [.font: font]).width
+			return (nameWidth + starsWidth) / referenceSize + nameGap
+		}
 	}
 }

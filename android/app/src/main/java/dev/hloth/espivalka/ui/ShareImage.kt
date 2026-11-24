@@ -39,7 +39,7 @@ private const val ImageHeight = 3840
 private const val ImageName = "Espivalka.png"
 private const val ImageDirectory = "shared"
 private const val ReferenceFontSize = 100f
-private const val CellHeight = 1.5f
+private const val Columns = 6
 private const val NameStarsGap = 0.5f
 private const val StarSize = 1f
 private const val ColumnGap = 1.5f
@@ -71,11 +71,11 @@ private fun renderShareImage(context: Context, ratings: Map<String, Int>): Bitma
 	val measurer = TextMeasurer(createFontFamilyResolver(context), LocaleList("en"), density, LayoutDirection.Ltr)
 	val names = shots.map { it.uppercase() }
 	val referenceStyle = TextStyle(color = TextColor, fontFamily = ComicSans, fontSize = ReferenceFontSize.sp)
-	val nameWidth = names.maxOf { measurer.measure(it, referenceStyle).size.width } / ReferenceFontSize
 	val grid = shareGrid(
-		itemCount = names.size,
-		cellWidth = nameWidth + NameStarsGap + MaxRating * StarSize,
-		cellHeight = CellHeight,
+		itemWidths = names.map {
+			measurer.measure(it, referenceStyle).size.width / ReferenceFontSize + NameStarsGap + MaxRating * StarSize
+		},
+		columns = Columns,
 		columnGap = ColumnGap,
 		margin = Margin,
 		aspectRatio = ImageWidth.toFloat() / ImageHeight,
@@ -89,8 +89,8 @@ private fun renderShareImage(context: Context, ratings: Map<String, Int>): Bitma
 		drawRect(BackgroundColor)
 		names.forEachIndexed { index, name ->
 			val left = grid.cellLeft(index) * em
-			val right = left + grid.cellWidth * em
-			val centerY = (grid.cellTop(index) + grid.cellHeight / 2) * em
+			val right = grid.cellRight(index) * em
+			val centerY = (grid.cellTop(index) + grid.rowHeight / 2) * em
 			val layout = measurer.measure(name, style)
 			val textTopLeft = Offset(left, centerY - layout.size.height / 2f)
 			drawGlow(layout, textTopLeft)

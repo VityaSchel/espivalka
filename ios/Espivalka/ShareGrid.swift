@@ -3,37 +3,22 @@ import CoreGraphics
 struct ShareGrid {
 	static let aspectRatio: CGFloat = 9 / 16
 
-	let columns: Int
 	let rows: Int
-	let contentSize: CGSize
+	let columnWidths: [CGFloat]
+	let rowHeight: CGFloat
+	let width: CGFloat
 
-	init(itemCount: Int, cellSize: CGSize, columnSpacing: CGFloat, margin: CGFloat) {
-		func layout(columnLimit: Int) -> (columns: Int, rows: Int, size: CGSize) {
-			let rows = (itemCount + columnLimit - 1) / columnLimit
-			let columns = (itemCount + rows - 1) / rows
-			let width = CGFloat(columns) * cellSize.width + CGFloat(columns - 1) * columnSpacing
-			let height = CGFloat(rows) * cellSize.height
-			return (columns, rows, CGSize(width: width + 2 * margin, height: height + 2 * margin))
+	init(itemWidths: [CGFloat], columns: Int, columnSpacing: CGFloat, margin: CGFloat) {
+		let rows = (itemWidths.count + columns - 1) / columns
+		self.rows = rows
+		columnWidths = stride(from: 0, to: itemWidths.count, by: rows).map { start in
+			itemWidths[start..<min(start + rows, itemWidths.count)].max()!
 		}
-		let best = (1...itemCount).map(layout).min { $0.size.aspectError < $1.size.aspectError }!
-		(columns, rows, contentSize) = best
+		width = columnWidths.reduce(0, +) + CGFloat(columnWidths.count - 1) * columnSpacing + 2 * margin
+		rowHeight = (width / Self.aspectRatio - 2 * margin) / CGFloat(rows)
 	}
 
-	var canvasSize: CGSize {
-		if contentSize.aspectRatio > Self.aspectRatio {
-			CGSize(width: contentSize.width, height: contentSize.width / Self.aspectRatio)
-		} else {
-			CGSize(width: contentSize.height * Self.aspectRatio, height: contentSize.height)
-		}
-	}
-}
-
-private extension CGSize {
-	var aspectRatio: CGFloat {
-		width / height
-	}
-
-	var aspectError: CGFloat {
-		abs(aspectRatio - ShareGrid.aspectRatio)
+	func items(inColumn column: Int, of count: Int) -> Range<Int> {
+		column * rows..<min((column + 1) * rows, count)
 	}
 }

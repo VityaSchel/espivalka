@@ -3,20 +3,15 @@ package dev.hloth.espivalka
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import kotlin.math.abs
 
 class ShareGridTest {
-	private val itemCount = shots.size
+	private val columns = 6
 	private val aspectRatio = 9f / 16f
-	private val cellWidth = 20f
-	private val cellHeight = 1.5f
 	private val columnGap = 1.5f
 	private val margin = 1.5f
+	private val itemWidths = shots.map { it.length.toFloat() }
 
-	private fun grid(count: Int = itemCount) = shareGrid(count, cellWidth, cellHeight, columnGap, margin, aspectRatio)
-
-	private fun contentAspect(columns: Int, rows: Int) =
-		(2 * margin + columns * cellWidth + (columns - 1) * columnGap) / (2 * margin + rows * cellHeight)
+	private fun grid(itemWidths: List<Float> = this.itemWidths) = shareGrid(itemWidths, columns, columnGap, margin, aspectRatio)
 
 	@Test
 	fun canvasIsExactlyNineBySixteen() {
@@ -25,51 +20,44 @@ class ShareGridTest {
 	}
 
 	@Test
-	fun picksColumnCountClosestToTargetAspect() {
-		val grid = grid()
-		val chosen = abs(contentAspect(grid.columns, grid.rows) - aspectRatio)
-		for (columns in 1..itemCount) {
-			val rows = (itemCount + columns - 1) / columns
-			assertTrue("columns=$columns", chosen <= abs(contentAspect(columns, rows) - aspectRatio) + 1e-6f)
-		}
-	}
-
-	@Test
 	fun everyItemFitsWithoutEmptyColumns() {
 		val grid = grid()
-		assertTrue(grid.columns * grid.rows >= itemCount)
-		assertTrue((grid.columns - 1) * grid.rows < itemCount)
+		assertEquals(columns, grid.columnWidths.size)
+		assertTrue(columns * grid.rows >= itemWidths.size)
+		assertTrue((columns - 1) * grid.rows < itemWidths.size)
 	}
 
 	@Test
-	fun contentIsCenteredInsideCanvas() {
+	fun columnsAreAsWideAsTheirWidestItem() {
+		val grid = grid(listOf(1f, 1f, 2f, 2f, 3f, 3f, 4f))
+		assertEquals(2, grid.rows)
+		assertEquals(listOf(1f, 2f, 3f, 4f), grid.columnWidths)
+	}
+
+	@Test
+	fun rowsFillTheHeightBetweenTheMargins() {
 		val grid = grid()
-		val contentWidth = grid.columns * cellWidth + (grid.columns - 1) * columnGap
-		val contentHeight = grid.rows * cellHeight
-		assertEquals(grid.width - contentWidth, 2 * grid.contentLeft, 1e-3f)
-		assertEquals(grid.height - contentHeight, 2 * grid.contentTop, 1e-3f)
-		assertTrue(grid.contentLeft >= margin - 1e-4f)
-		assertTrue(grid.contentTop >= margin - 1e-4f)
+		assertEquals(grid.height - 2 * margin, grid.rows * grid.rowHeight, 1e-2f)
 	}
 
 	@Test
 	fun cellsFlowTopToBottomThenLeftToRight() {
 		val grid = grid()
-		assertEquals(grid.contentLeft, grid.cellLeft(0))
-		assertEquals(grid.contentTop, grid.cellTop(0))
-		assertEquals(grid.contentLeft, grid.cellLeft(1))
-		assertEquals(grid.contentTop + cellHeight, grid.cellTop(1))
-		assertEquals(grid.contentLeft + cellWidth + columnGap, grid.cellLeft(grid.rows))
-		assertEquals(grid.contentTop, grid.cellTop(grid.rows))
+		assertEquals(margin, grid.cellLeft(0))
+		assertEquals(margin, grid.cellTop(0))
+		assertEquals(grid.cellLeft(0), grid.cellLeft(1))
+		assertEquals(margin + grid.rowHeight, grid.cellTop(1), 1e-4f)
+		assertEquals(grid.cellRight(0) + columnGap, grid.cellLeft(grid.rows), 1e-4f)
+		assertEquals(margin, grid.cellTop(grid.rows))
+		assertEquals(grid.width - margin, grid.cellRight(itemWidths.lastIndex), 1e-2f)
 	}
 
 	@Test
-	fun singleItemIsCentered() {
-		val grid = grid(count = 1)
-		assertEquals(1, grid.columns)
+	fun singleItemFillsItsColumn() {
+		val grid = grid(listOf(20f))
 		assertEquals(1, grid.rows)
-		assertEquals(aspectRatio, grid.width / grid.height, 1e-5f)
-		assertEquals(grid.width - cellWidth, 2 * grid.contentLeft, 1e-3f)
-		assertEquals(grid.height - cellHeight, 2 * grid.contentTop, 1e-3f)
+		assertEquals(20f + 2 * margin, grid.width)
+		assertEquals(margin, grid.cellLeft(0))
+		assertEquals(margin + 20f, grid.cellRight(0))
 	}
 }

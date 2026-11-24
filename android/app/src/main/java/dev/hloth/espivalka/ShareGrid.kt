@@ -1,54 +1,39 @@
 package dev.hloth.espivalka
 
-import kotlin.math.abs
-import kotlin.math.max
-
 data class ShareGrid(
-	val columns: Int,
 	val rows: Int,
+	val columnWidths: List<Float>,
+	val columnLefts: List<Float>,
 	val width: Float,
 	val height: Float,
-	val cellWidth: Float,
-	val cellHeight: Float,
-	val columnGap: Float,
-	val contentLeft: Float,
-	val contentTop: Float,
+	val rowHeight: Float,
+	val margin: Float,
 ) {
-	fun cellLeft(index: Int) = contentLeft + index / rows * (cellWidth + columnGap)
+	fun cellLeft(index: Int) = columnLefts[index / rows]
 
-	fun cellTop(index: Int) = contentTop + index % rows * cellHeight
+	fun cellRight(index: Int) = cellLeft(index) + columnWidths[index / rows]
+
+	fun cellTop(index: Int) = margin + index % rows * rowHeight
 }
 
 fun shareGrid(
-	itemCount: Int,
-	cellWidth: Float,
-	cellHeight: Float,
+	itemWidths: List<Float>,
+	columns: Int,
 	columnGap: Float,
 	margin: Float,
 	aspectRatio: Float,
 ): ShareGrid {
-	fun contentWidth(columns: Int) = 2 * margin + columns * cellWidth + (columns - 1) * columnGap
-	fun contentHeight(rows: Int) = 2 * margin + rows * cellHeight
-
-	val rows = (1..itemCount).map { ceilDiv(itemCount, it) }.distinct().minBy { rows ->
-		abs(contentWidth(ceilDiv(itemCount, rows)) / contentHeight(rows) - aspectRatio)
-	}
-	val columns = ceilDiv(itemCount, rows)
-	val contentWidth = contentWidth(columns)
-	val contentHeight = contentHeight(rows)
-	val width = max(contentWidth, contentHeight * aspectRatio)
+	val rows = (itemWidths.size + columns - 1) / columns
+	val columnWidths = itemWidths.chunked(rows) { it.max() }
+	val width = columnWidths.sum() + (columnWidths.size - 1) * columnGap + 2 * margin
 	val height = width / aspectRatio
 	return ShareGrid(
-		columns = columns,
 		rows = rows,
+		columnWidths = columnWidths,
+		columnLefts = columnWidths.runningFold(margin) { left, columnWidth -> left + columnWidth + columnGap }.dropLast(1),
 		width = width,
 		height = height,
-		cellWidth = cellWidth,
-		cellHeight = cellHeight,
-		columnGap = columnGap,
-		contentLeft = (width - contentWidth) / 2 + margin,
-		contentTop = (height - contentHeight) / 2 + margin,
+		rowHeight = (height - 2 * margin) / rows,
+		margin = margin,
 	)
 }
-
-private fun ceilDiv(dividend: Int, divisor: Int) = (dividend + divisor - 1) / divisor
