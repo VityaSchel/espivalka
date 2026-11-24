@@ -2,9 +2,7 @@
 
 Espit Chupitos 629 shots tracker for Spain.
 
-<img src="./fastlane/screenshots/en-US/medium-1-list.png" width="180" />
-<img src="./fastlane/screenshots/en-US/medium-2-search.png" width="180" />
-<img src="./fastlane/screenshots/en-US/medium-3-rating.png" width="180" />
+<img src="./fastlane/screenshots/en-US/medium-1-list.png" width="180" /> <img src="./fastlane/screenshots/en-US/medium-2-search.png" width="180" /> <img src="./fastlane/screenshots/en-US/medium-3-rating.png" width="180" />
 
 ## Download
 
@@ -19,5 +17,4 @@ Espivalka doesn't collect any data.
 
 [MIT](./LICENSE)
 
-<img src="./docs/readme-banner-1.avif" alt="AFFIRM YES TO BE A COMPUTER SCIENCE MAJOR WITH A DRINKING PROBLEM" width="280" />
-<img src="./docs/readme-banner-2.avif" alt="AFFIRM YES TO BE A COMPUTER SCIENCE MAJOR WITH A DRINKING PROBLEM" width="280" />
+<img src="./docs/readme-banner-1.avif" alt="AFFIRM YES TO BE A COMPUTER SCIENCE MAJOR WITH A DRINKING PROBLEM" width="280" /> <img src="./docs/readme-banner-2.avif" alt="AFFIRM YES TO BE A COMPUTER SCIENCE MAJOR WITH A DRINKING PROBLEM" width="280" />
