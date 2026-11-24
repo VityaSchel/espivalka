@@ -1,5 +1,6 @@
 package dev.hloth.espivalka.ui
 
+import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,10 +19,12 @@ import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.sp
 import dev.hloth.espivalka.ui.theme.GlowColor
 
 private const val GlowStrokeWidth = 0.15f
 private const val GlowBlurRadius = 0.5f
+private val MinFontSize = 12.sp
 
 fun DrawScope.drawGlow(layout: TextLayoutResult, topLeft: Offset = Offset.Zero) {
 	val fontSize = layout.layoutInput.style.fontSize.toPx()
@@ -40,6 +43,7 @@ fun GlowText(text: String, modifier: Modifier = Modifier, style: TextStyle = Loc
 	Text(
 		text = text,
 		modifier = modifier.drawBehind { layout?.let { drawGlow(it) } },
+		autoSize = TextAutoSize.StepBased(minFontSize = MinFontSize, maxFontSize = style.fontSize),
 		style = style,
 		maxLines = 1,
 		overflow = TextOverflow.Ellipsis,

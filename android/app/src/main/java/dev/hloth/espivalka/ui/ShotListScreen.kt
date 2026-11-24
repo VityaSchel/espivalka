@@ -1,5 +1,6 @@
 package dev.hloth.espivalka.ui
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,6 +19,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Button
@@ -28,6 +30,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Surface
@@ -164,9 +167,21 @@ private fun SearchTopBar(query: TextFieldState, ratedCount: Int) {
 private fun ShotRow(shot: String, rating: Int?, onClick: () -> Unit) {
 	ListItem(
 		onClick = onClick,
-		trailingContent = rating?.let { { RatingStars(it) } },
+		trailingContent = { RowTrailing(rating) },
 	) {
 		GlowText(shot.uppercase(), style = LocalTextStyle.current.copy(fontFamily = ComicSans))
+	}
+}
+
+@Composable
+private fun RowTrailing(rating: Int?) {
+	Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+		rating?.let { RatingStars(it) }
+		Icon(
+			imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowRight,
+			contentDescription = null,
+			tint = MaterialTheme.colorScheme.onSurfaceVariant,
+		)
 	}
 }
 
@@ -175,7 +190,7 @@ private fun RatingStars(rating: Int) {
 	val description = pluralStringResource(R.plurals.stars, rating, rating)
 	Row(Modifier.semantics { contentDescription = description }) {
 		repeat(rating) {
-			Icon(FilledStar, contentDescription = null, modifier = Modifier.size(18.dp), tint = StarColor)
+			Icon(FilledStar, contentDescription = null, modifier = Modifier.size(24.dp), tint = StarColor)
 		}
 	}
 }
