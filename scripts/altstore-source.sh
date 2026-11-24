@@ -12,7 +12,9 @@ readonly raw=$site/raw/branch/main
 setting() { sed -n "s/^.*$1 = \"\{0,1\}\([^\";]*\)\"\{0,1\};\$/\1/p" "$pbxproj" | sort -u | head -1; }
 text() { tr -d '\n' < "$repo/fastlane/metadata/en-US/$1.txt"; }
 version=$(setting MARKETING_VERSION)
-release=$site/releases/download/v$version
+tag=$(git -C "$repo" describe --tags --abbrev=0)
+readonly tag
+release=$site/releases/download/$tag
 ipa=$(find "$adp" -name '*.ipa' | LC_ALL=C sort | head -1)
 [ -n "$ipa" ] || { echo "no IPA in $adp" >&2; exit 1; }
 
