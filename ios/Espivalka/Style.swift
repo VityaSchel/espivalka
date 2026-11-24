@@ -12,7 +12,8 @@ enum Palette {
 
 extension Font {
 	static let shotNameFamily = "Comic Sans MS"
-	static let shotName = Font.custom(shotNameFamily, size: 17, relativeTo: .body)
+	static let shotNameSize: CGFloat = 17
+	static let shotName = Font.custom(shotNameFamily, size: shotNameSize, relativeTo: .body)
 }
 
 struct Star: View {
@@ -36,16 +37,24 @@ extension Text {
 struct Glow: ViewModifier {
 	static let radius: CGFloat = 4
 
-	@ScaledMetric(relativeTo: .body) private var radius = Self.radius
+	@ScaledMetric(relativeTo: .body) private var bodyRadius = Self.radius
+	@Environment(\.glowRadius) private var glowRadius
+
+	static func radius(forFontSize fontSize: CGFloat) -> CGFloat {
+		fontSize * radius / Font.shotNameSize
+	}
 
 	func body(content: Content) -> some View {
-		content
+		let radius = glowRadius ?? bodyRadius
+		return content
 			.shadow(color: Palette.glow, radius: radius / 4)
-			.shadow(color: Palette.glow, radius: radius / 4)
-			.shadow(color: Palette.glow, radius: radius / 2)
 			.shadow(color: Palette.glow, radius: radius / 2)
 			.shadow(color: Palette.glow, radius: radius)
 	}
+}
+
+extension EnvironmentValues {
+	@Entry var glowRadius: CGFloat?
 }
 
 extension View {

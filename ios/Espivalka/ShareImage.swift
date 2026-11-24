@@ -88,6 +88,7 @@ private struct ShareCanvas: View {
 			}
 		}
 		.font(.custom(Font.shotNameFamily, fixedSize: fontSize))
+		.environment(\.glowRadius, Glow.radius(forFontSize: fontSize))
 		.frame(width: ShareImage.pixelSize.width, height: ShareImage.pixelSize.height)
 		.background(Palette.background)
 	}
