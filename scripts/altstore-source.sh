@@ -29,7 +29,7 @@ jq -n \
 	--argjson assets "$assets" --argjson screenshots "$screenshots" '{
 	name: "Espivalka",
 	subtitle: $description,
-	iconURL: ($raw + "/altstore/icon.png"),
+	iconURL: ($raw + "/fastlane/metadata/android/en-US/images/icon.png"),
 	website: $site,
 	tintColor: "#6400fd",
 	apps: [{
@@ -39,7 +39,7 @@ jq -n \
 		developerName: "Viktor Shchelochkov",
 		subtitle: $description,
 		localizedDescription: $description,
-		iconURL: ($raw + "/altstore/icon.png"),
+		iconURL: ($raw + "/fastlane/metadata/android/en-US/images/icon.png"),
 		tintColor: "#6400fd",
 		category: "lifestyle",
 		screenshots: $screenshots,
