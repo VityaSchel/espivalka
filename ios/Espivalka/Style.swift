@@ -23,7 +23,7 @@ struct Star: View {
 	var body: some View {
 		Image(systemName: Self.symbol)
 			.symbolVariant(isFilled ? .fill : .none)
-			.fontWeight(.black)
+			.fontWeight(isFilled ? .black : .medium)
 	}
 }
 
