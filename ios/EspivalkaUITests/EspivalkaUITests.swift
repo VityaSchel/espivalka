@@ -41,7 +41,9 @@ nonisolated final class EspivalkaUITests: XCTestCase {
 		let expandedHeight = bar.frame.height
 		capture("title-expanded")
 
-		app.swipeUp()
+		for _ in 0..<3 where bar.frame.height >= expandedHeight {
+			app.swipeUp()
+		}
 		capture("title-collapsed")
 		XCTAssertTrue(app.searchFields["Search"].isHittable)
 		XCTAssertLessThan(bar.frame.height, expandedHeight)
