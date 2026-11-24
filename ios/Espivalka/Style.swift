@@ -2,7 +2,7 @@ import SwiftUI
 
 enum Palette {
 	static let background = Color(hex: 0x02000A)
-	static let text = Color.accent
+	static let text = Color(hex: 0x13C0FF)
 	static let glow = Color(hex: 0x3300FF)
 	static let star = Color(hex: 0xFFA100)
 	static let buttonBackground = Color(hex: 0x6400FD)
