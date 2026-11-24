@@ -57,7 +57,7 @@ nonisolated struct ShareImage: Transferable {
 private struct ShareCanvas: View {
 	private static let columns = 6
 	private static let nameGap: CGFloat = 1
-	private static let columnSpacing: CGFloat = 1.5
+	private static let columnSpacing: CGFloat = 2.5
 	private static let margin: CGFloat = 1.5
 
 	let ratings: [String: Int]

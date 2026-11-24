@@ -41,8 +41,9 @@ private const val ImageDirectory = "shared"
 private const val ReferenceFontSize = 100f
 private const val Columns = 6
 private const val NameStarsGap = 0.5f
-private const val StarSize = 1f
-private const val ColumnGap = 1.5f
+private const val StarSize = 1.5f
+private const val StarPitch = 1.36f
+private const val ColumnGap = 2.5f
 private const val Margin = 1.5f
 
 suspend fun exportShareImage(context: Context, ratings: Map<String, Int>): Uri = withContext(Dispatchers.Default) {
@@ -73,7 +74,7 @@ private fun renderShareImage(context: Context, ratings: Map<String, Int>): Bitma
 	val referenceStyle = TextStyle(color = TextColor, fontFamily = ComicSans, fontSize = ReferenceFontSize.sp)
 	val grid = shareGrid(
 		itemWidths = names.map {
-			measurer.measure(it, referenceStyle).size.width / ReferenceFontSize + NameStarsGap + MaxRating * StarSize
+			measurer.measure(it, referenceStyle).size.width / ReferenceFontSize + NameStarsGap + MaxRating * StarPitch
 		},
 		columns = Columns,
 		columnGap = ColumnGap,
@@ -82,6 +83,7 @@ private fun renderShareImage(context: Context, ratings: Map<String, Int>): Bitma
 	)
 	val em = ImageWidth / grid.width
 	val starSize = StarSize * em
+	val starPitch = StarPitch * em
 	val style = referenceStyle.copy(fontSize = em.sp)
 	val image = ImageBitmap(ImageWidth, ImageHeight, ImageBitmapConfig.Argb8888, hasAlpha = false)
 	val size = Size(ImageWidth.toFloat(), ImageHeight.toFloat())
@@ -96,7 +98,8 @@ private fun renderShareImage(context: Context, ratings: Map<String, Int>): Bitma
 			drawGlow(layout, textTopLeft)
 			drawText(layout, topLeft = textTopLeft, shadow = Shadow.None, drawStyle = Fill)
 			repeat(ratings[shots[index]] ?: 0) { star ->
-				drawStar(Offset(right - (star + 1) * starSize, centerY - starSize / 2), starSize, StarColor)
+				val centerX = right - (star + 0.5f) * starPitch
+				drawStar(Offset(centerX - starSize / 2, centerY - starSize / 2), starSize, StarColor)
 			}
 		}
 	}
