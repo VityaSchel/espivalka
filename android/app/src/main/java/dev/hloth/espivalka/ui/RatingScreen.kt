@@ -1,6 +1,5 @@
 package dev.hloth.espivalka.ui
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.drag
@@ -47,7 +46,6 @@ import kotlin.math.ceil
 
 @Composable
 fun RatingScreen(shot: String, savedRating: Int?, onBack: () -> Unit, onSave: (Int) -> Unit) {
-	BackHandler(onBack = onBack)
 	var rating by rememberSaveable { mutableIntStateOf(savedRating ?: 0) }
 	Scaffold(
 		topBar = {

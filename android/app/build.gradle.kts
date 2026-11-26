@@ -53,5 +53,7 @@ dependencies {
 	implementation(libs.androidx.compose.material.icons.core)
 	implementation(libs.androidx.compose.ui)
 	implementation(libs.androidx.core.ktx)
+	implementation(libs.androidx.navigation3.runtime)
+	implementation(libs.androidx.navigation3.ui)
 	testImplementation(libs.junit)
 }
