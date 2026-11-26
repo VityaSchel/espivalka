@@ -1,5 +1,6 @@
 package dev.hloth.espivalka.ui
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,6 +19,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.clearText
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Search
@@ -78,12 +80,14 @@ fun ShotListScreen(
 	onShotClick: (String) -> Unit,
 ) {
 	val results by remember(query) { derivedStateOf { filterShots(query.text.toString()) } }
+	val searching by remember(query) { derivedStateOf { query.text.isNotEmpty() } }
 	val context = LocalContext.current
 	val scope = rememberCoroutineScope()
 	var sharing by remember { mutableStateOf(false) }
 	LaunchedEffect(query, listState) {
 		snapshotFlow { query.text.toString() }.drop(1).collect { listState.scrollToItem(0) }
 	}
+	BackHandler(enabled = searching, onBack = query::clearText)
 	Scaffold(topBar = { SearchTopBar(query, ratings.size) }) { padding ->
 		LazyColumn(
 			modifier = Modifier
