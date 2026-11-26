@@ -1,1 +1,1 @@
-chupitos,shots,espit,bar,barcelona,spain,drinks,rating,tracker
+chupitos,shots,bar,barcelona,spain,drinks,rating,tracker,list

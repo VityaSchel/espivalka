@@ -1,6 +1,6 @@
 # Espivalka
 
-Espit Chupitos 629 shots tracker for Spain.
+Unofficial Espit Chupitos 629 shots tracker for Spain. Not affiliated with or endorsed by Espit Chupitos.
 
 <img src="./fastlane/screenshots/en-US/medium-1-list.png" width="180" /> <img src="./fastlane/screenshots/en-US/medium-2-search.png" width="180" /> <img src="./fastlane/screenshots/en-US/medium-3-rating.png" width="180" />
 
