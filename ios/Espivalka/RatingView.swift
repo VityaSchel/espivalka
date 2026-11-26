@@ -1,5 +1,15 @@
 import SwiftUI
 
+struct RatingScreen: View {
+	let name: String
+	let ratings: Ratings
+
+	var body: some View {
+		RatingView(name: name, rating: ratings[name])
+			.environment(ratings)
+	}
+}
+
 struct RatingView: View {
 	nonisolated private static let saveSpacing: CGFloat = 32
 
@@ -28,16 +38,7 @@ struct RatingView: View {
 			}
 			.frame(maxWidth: .infinity, maxHeight: .infinity)
 			.background(Palette.background)
-			.navigationTitle(name)
-			.navigationBarTitleDisplayMode(.inline)
-			.toolbar {
-				ToolbarItem(placement: .principal) {
-					Text(name)
-						.font(.headline)
-						.foregroundStyle(Palette.text)
-						.glow()
-				}
-			}
+			.inlineTitle(name)
 	}
 }
 

@@ -8,12 +8,16 @@ enum Palette {
 	static let buttonBackground = Color(hex: 0x6400FD)
 	static let progress = Color.white
 	static let separator = glow.opacity(0.6)
+	static let scrim = Color.black.opacity(0.65)
+	static let wheel = [buttonBackground, text, glow, glow.mix(with: background, by: 0.5)]
 }
 
 extension Font {
 	static let shotNameFamily = "Comic Sans MS"
 	static let shotNameSize: CGFloat = 17
 	static let shotName = Font.custom(shotNameFamily, size: shotNameSize, relativeTo: .body)
+	static let shotTitleSize: CGFloat = 44
+	static let shotTitle = Font.custom(shotNameFamily, size: shotTitleSize, relativeTo: .largeTitle)
 }
 
 struct Star: View {
@@ -62,9 +66,37 @@ extension View {
 		modifier(Glow())
 	}
 
+	func inlineTitle(_ title: String) -> some View {
+		navigationTitle(title)
+			.navigationBarTitleDisplayMode(.inline)
+			.toolbar {
+				ToolbarItem(placement: .principal) {
+					Text(title)
+						.font(.headline)
+						.foregroundStyle(Palette.text)
+						.glow()
+				}
+			}
+	}
+
 	func accentButton() -> some View {
 		buttonStyle(.borderedProminent)
-			.controlSize(.large)
+			.accentButtonColors()
+	}
+
+	@ViewBuilder
+	func floatingAccentButton() -> some View {
+		if #available(iOS 26, *) {
+			buttonStyle(.glassProminent)
+				.accentButtonColors()
+		} else {
+			accentButton()
+				.buttonBorderShape(.capsule)
+		}
+	}
+
+	private func accentButtonColors() -> some View {
+		controlSize(.large)
 			.tint(Palette.buttonBackground)
 			.foregroundStyle(Palette.text)
 	}

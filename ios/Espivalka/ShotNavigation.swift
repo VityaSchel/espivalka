@@ -21,18 +21,24 @@ final class SearchQuery {
 struct ShotListRoot: View {
 	let ratings: Ratings
 	let query: SearchQuery
+	var spinWheel: () -> Void = {}
 
 	var body: some View {
-		ShotListView(query: query)
+		ShotListView(query: query, spinWheel: spinWheel)
 			.environment(ratings)
 	}
 }
 
 final class ShotListController: UIHostingController<ShotListRoot>, UISearchResultsUpdating {
+	private let ratings: Ratings
 	private let query = SearchQuery()
 
 	init(ratings: Ratings) {
+		self.ratings = ratings
 		super.init(rootView: ShotListRoot(ratings: ratings, query: query))
+		rootView.spinWheel = { [weak self] in
+			self?.spinWheel()
+		}
 		title = "Espivalka"
 		view.backgroundColor = UIColor(Palette.background)
 		let search = UISearchController(searchResultsController: nil)
@@ -54,5 +60,37 @@ final class ShotListController: UIHostingController<ShotListRoot>, UISearchResul
 
 	func updateSearchResults(for searchController: UISearchController) {
 		query.text = searchController.searchBar.text ?? ""
+	}
+
+	private func spinWheel() {
+		var generator = SystemRandomNumberGenerator()
+		let draw = WheelDraw.random(from: WheelDraw.candidates(from: shots, ratings: ratings.values), using: &generator)
+		let wheel = RandomController(draw: draw) { [weak self] in
+			self?.openRating(of: draw.winnerName)
+		}
+		navigationController?.pushViewController(wheel, animated: true)
+	}
+
+	private func openRating(of name: String) {
+		let rating = UIHostingController(rootView: RatingScreen(name: name, ratings: ratings))
+		navigationController?.setViewControllers([self, rating], animated: true)
+	}
+}
+
+final class RandomController: UIHostingController<RandomView> {
+	init(draw: WheelDraw, openRating: @escaping () -> Void) {
+		super.init(rootView: RandomView(draw: draw, openRating: openRating))
+	}
+
+	@available(*, unavailable)
+	required init?(coder: NSCoder) {
+		fatalError()
+	}
+
+	override func viewDidAppear(_ animated: Bool) {
+		super.viewDidAppear(animated)
+		if rootView.start == nil {
+			rootView.start = .now
+		}
 	}
 }

@@ -14,9 +14,7 @@ struct ShotLabel: View {
 
 	var body: some View {
 		layout {
-			Text(name.uppercased())
-				.foregroundStyle(Palette.text)
-				.glow()
+			ShotName(name: name)
 				.frame(maxWidth: .infinity, alignment: .leading)
 			if rating > 0 {
 				HStack(spacing: 2) {
@@ -29,5 +27,15 @@ struct ShotLabel: View {
 				.accessibilityLabel(Text.stars(rating))
 			}
 		}
+	}
+}
+
+struct ShotName: View {
+	let name: String
+
+	var body: some View {
+		Text(name.uppercased())
+			.foregroundStyle(Palette.text)
+			.glow()
 	}
 }

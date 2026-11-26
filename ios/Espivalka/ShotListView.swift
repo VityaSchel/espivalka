@@ -3,14 +3,14 @@ import SwiftUI
 struct ShotListView: View {
 	@Environment(Ratings.self) private var ratings
 	let query: SearchQuery
+	let spinWheel: () -> Void
 
 	var body: some View {
 		List {
 			Group {
 				ForEach(ShotSearch.all.results(for: query.text), id: \.self) { name in
 					NavigationLink {
-						RatingView(name: name, rating: ratings[name])
-							.environment(ratings)
+						RatingScreen(name: name, ratings: ratings)
 					} label: {
 						ShotLabel(name: name, rating: ratings[name])
 							.font(.shotName)
@@ -30,6 +30,12 @@ struct ShotListView: View {
 		.scrollContentBackground(.hidden)
 		.topBarAttachment {
 			RatingProgress(rated: shots.count(where: { ratings[$0] > 0 }), total: shots.count)
+		}
+		.safeAreaInset(edge: .bottom, alignment: .trailing) {
+			Button("Random", systemImage: "dice", action: spinWheel)
+				.floatingAccentButton()
+				.accessibilityHint("Spins a wheel of the shots you have not rated")
+				.padding()
 		}
 	}
 }

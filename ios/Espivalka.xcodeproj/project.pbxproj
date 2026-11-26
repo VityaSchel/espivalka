@@ -37,6 +37,13 @@
 			);
 			target = 000000000000000100000000 /* Espivalka */;
 		};
+		000000000000000000000031 /* Exceptions for "Espivalka" folder in "EspivalkaUITests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Shots.swift,
+			);
+			target = 000000000000000300000000 /* EspivalkaUITests */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -44,6 +51,7 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				000000000000000000000030 /* Exceptions for "Espivalka" folder in "Espivalka" target */,
+				000000000000000000000031 /* Exceptions for "Espivalka" folder in "EspivalkaUITests" target */,
 			);
 			path = Espivalka;
 			sourceTree = "<group>";
