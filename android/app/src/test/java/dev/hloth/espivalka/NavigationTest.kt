@@ -8,7 +8,7 @@ class NavigationTest {
 
 	@Test
 	fun everyScreenSurvivesItsRoute() {
-		val screens = listOf(Screen.ShotList) + shots.map(Screen::Rating)
+		val screens = listOf(Screen.ShotList, Screen.Random) + shots.map(Screen::Rating)
 		screens.forEach { assertEquals(it, screenOf(it.route)) }
 	}
 
@@ -16,7 +16,7 @@ class NavigationTest {
 	fun screensOpenOnlyFromTheTopScreen() {
 		val backStack = mutableListOf<Screen>(Screen.ShotList)
 		backStack.open(rating, from = Screen.ShotList)
-		backStack.open(Screen.Rating(shots.last()), from = Screen.ShotList)
+		backStack.open(Screen.Random, from = Screen.ShotList)
 		assertEquals(listOf(Screen.ShotList, rating), backStack)
 	}
 
@@ -26,5 +26,13 @@ class NavigationTest {
 		backStack.close(rating)
 		backStack.close(rating)
 		assertEquals(listOf(Screen.ShotList), backStack)
+	}
+
+	@Test
+	fun randomIsReplacedByTheRatingOfThePickedShot() {
+		val backStack = mutableListOf(Screen.ShotList, Screen.Random)
+		backStack.replace(Screen.Random, rating)
+		backStack.replace(Screen.Random, Screen.Rating(shots.last()))
+		assertEquals(listOf(Screen.ShotList, rating), backStack)
 	}
 }

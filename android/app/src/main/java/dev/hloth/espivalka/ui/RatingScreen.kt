@@ -11,14 +11,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.selection.selectableGroup
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -47,18 +43,7 @@ import kotlin.math.ceil
 @Composable
 fun RatingScreen(shot: String, savedRating: Int?, onBack: () -> Unit, onSave: (Int) -> Unit) {
 	var rating by rememberSaveable { mutableIntStateOf(savedRating ?: 0) }
-	Scaffold(
-		topBar = {
-			TopAppBar(
-				title = { GlowText(shot) },
-				navigationIcon = {
-					IconButton(onClick = onBack) {
-						Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back))
-					}
-				},
-			)
-		},
-	) { padding ->
+	Scaffold(topBar = { BackTopBar(shot, onBack) }) { padding ->
 		Column(
 			modifier = Modifier
 				.fillMaxSize()

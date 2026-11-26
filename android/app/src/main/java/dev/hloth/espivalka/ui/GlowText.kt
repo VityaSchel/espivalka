@@ -20,7 +20,9 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
+import dev.hloth.espivalka.ui.theme.ComicSans
 import dev.hloth.espivalka.ui.theme.GlowColor
+import dev.hloth.espivalka.ui.theme.TextColor
 
 private const val GlowStrokeWidth = 0.15f
 private const val GlowBlurRadius = 0.5f
@@ -49,4 +51,9 @@ fun GlowText(text: String, modifier: Modifier = Modifier, style: TextStyle = Loc
 		overflow = TextOverflow.Ellipsis,
 		onTextLayout = { layout = it },
 	)
+}
+
+@Composable
+fun ShotName(shot: String, style: TextStyle = LocalTextStyle.current) {
+	GlowText(shot.uppercase(), style = style.copy(color = TextColor, fontFamily = ComicSans))
 }

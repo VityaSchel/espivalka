@@ -17,6 +17,9 @@ val AccentColor = Color(0xFF6400FD)
 
 private val DividerColor = GlowColor.copy(alpha = 0.4f).compositeOver(BackgroundColor)
 private val SearchFieldColor = GlowColor.copy(alpha = 0.2f).compositeOver(BackgroundColor)
+private val DarkBlueColor = TextColor.copy(alpha = 0.35f).compositeOver(BackgroundColor)
+
+val WheelPalette = listOf(AccentColor, TextColor, GlowColor, DarkBlueColor)
 
 val ComicSans = FontFamily(Font(R.font.comic_sans_ms))
 

@@ -4,6 +4,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.plus
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -27,11 +29,11 @@ import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.ListItem
-import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBarDefaults
@@ -52,6 +54,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -62,8 +65,8 @@ import androidx.compose.ui.unit.dp
 import dev.hloth.espivalka.R
 import dev.hloth.espivalka.filterShots
 import dev.hloth.espivalka.shots
+import dev.hloth.espivalka.ui.theme.AccentColor
 import dev.hloth.espivalka.ui.theme.BackgroundColor
-import dev.hloth.espivalka.ui.theme.ComicSans
 import dev.hloth.espivalka.ui.theme.StarColor
 import dev.hloth.espivalka.ui.theme.TextColor
 import kotlinx.coroutines.flow.drop
@@ -71,6 +74,7 @@ import kotlinx.coroutines.launch
 import java.io.IOException
 
 private const val ShareItemKey = "share"
+private val FabClearance = 72.dp
 
 @Composable
 fun ShotListScreen(
@@ -78,6 +82,7 @@ fun ShotListScreen(
 	listState: LazyListState,
 	ratings: Map<String, Int>,
 	onShotClick: (String) -> Unit,
+	onRandomClick: () -> Unit,
 ) {
 	val results by remember(query) { derivedStateOf { filterShots(query.text.toString()) } }
 	val searching by remember(query) { derivedStateOf { query.text.isNotEmpty() } }
@@ -88,14 +93,17 @@ fun ShotListScreen(
 		snapshotFlow { query.text.toString() }.drop(1).collect { listState.scrollToItem(0) }
 	}
 	BackHandler(enabled = searching, onBack = query::clearText)
-	Scaffold(topBar = { SearchTopBar(query, ratings.size) }) { padding ->
+	Scaffold(
+		topBar = { SearchTopBar(query, ratings.size) },
+		floatingActionButton = { RandomButton(onRandomClick) },
+	) { padding ->
 		LazyColumn(
 			modifier = Modifier
 				.fillMaxSize()
 				.consumeWindowInsets(padding)
 				.imePadding(),
 			state = listState,
-			contentPadding = padding,
+			contentPadding = padding + PaddingValues(bottom = FabClearance),
 		) {
 			items(results, key = { it }) { shot ->
 				ShotRow(shot, ratings[shot], onClick = { onShotClick(shot) })
@@ -173,7 +181,7 @@ private fun ShotRow(shot: String, rating: Int?, onClick: () -> Unit) {
 		onClick = onClick,
 		trailingContent = { RowTrailing(rating) },
 	) {
-		GlowText(shot.uppercase(), style = LocalTextStyle.current.copy(fontFamily = ComicSans))
+		ShotName(shot)
 	}
 }
 
@@ -197,6 +205,17 @@ private fun RatingStars(rating: Int) {
 			Icon(FilledStar, contentDescription = null, modifier = Modifier.size(24.dp), tint = StarColor)
 		}
 	}
+}
+
+@Composable
+private fun RandomButton(onClick: () -> Unit) {
+	ExtendedFloatingActionButton(
+		text = { Text(stringResource(R.string.random)) },
+		icon = { Icon(painterResource(R.drawable.ic_casino), contentDescription = null) },
+		onClick = onClick,
+		containerColor = AccentColor,
+		contentColor = TextColor,
+	)
 }
 
 @Composable

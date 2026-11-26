@@ -24,6 +24,7 @@ import dev.hloth.espivalka.RatingStore
 import dev.hloth.espivalka.Screen
 import dev.hloth.espivalka.close
 import dev.hloth.espivalka.open
+import dev.hloth.espivalka.replace
 import dev.hloth.espivalka.route
 import dev.hloth.espivalka.screenOf
 
@@ -53,6 +54,14 @@ fun EspivalkaApp(ratingStore: RatingStore) {
 					listState = listState,
 					ratings = ratingStore.ratings,
 					onShotClick = { shot -> backStack.open(Screen.Rating(shot), from = screen) },
+					onRandomClick = { backStack.open(Screen.Random, from = screen) },
+				)
+			}
+			entry<Screen.Random> { screen ->
+				RandomScreen(
+					ratings = ratingStore.ratings,
+					onBack = { backStack.close(screen) },
+					onPicked = { shot -> backStack.replace(screen, Screen.Rating(shot)) },
 				)
 			}
 			entry<Screen.Rating> { screen ->
