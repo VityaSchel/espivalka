@@ -7,7 +7,7 @@ Espit Chupitos 629 shots tracker for Spain.
 ## Download
 
 - **Android**: [apk](https://git.hloth.dev/hloth/espivalka/releases) · ~~[Google Play (soon)](https://play.google.com/store/apps/details?id=dev.hloth.espivalka)~~
-- **iOS**: ~~[AltStore PAL (soon)](#)~~ · ~~[TestFlight (soon)](https://testflight.apple.com/join/GbWB5m8y)~~ · ~~[App Store (soon)]()~~ · [ipa](https://git.hloth.dev/hloth/espivalka/releases)
+- **iOS**: ~~[AltStore PAL (soon)](#)~~ · [TestFlight (soon)](https://testflight.apple.com/join/GbWB5m8y) · ~~[App Store (soon)]()~~ · [ipa](https://git.hloth.dev/hloth/espivalka/releases)
 
 ## Privacy
 
